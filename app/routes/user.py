@@ -1,14 +1,14 @@
 # routes/user.py
 from fastapi import APIRouter, HTTPException
-from app.crud import UserService
-from app.auth import create_access_token
+from app.controllers.controller import create_user, authenticate_user, verify_user
+from app.services.auth import create_access_token
 
 
 user_router = APIRouter()
 
 @user_router.post("/signup")
 async def signup(user_data: dict):
-    result = await UserService.create_user(user_data)
+    result = await create_user(user_data)
     
     if not result:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -26,14 +26,14 @@ async def signup(user_data: dict):
 
 @user_router.get("/verify")
 async def verify_email(token: str):
-    result = await UserService.verify_user(token)
+    result = await verify_user(token)
     if result.modified_count == 0:
         raise HTTPException(status_code=400, detail="Invalid verification token")
     return {"message": "Email verified successfully"}
 
 @user_router.post("/login")
 async def login(user_data: dict):
-    user = await UserService.authenticate_user(
+    user = await authenticate_user(
         user_data['email'], 
         user_data['password']
     )

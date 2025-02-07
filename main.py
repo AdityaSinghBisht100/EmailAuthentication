@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.database import DatabaseConnection
+from app.db.database import connect_and_init, close
 from app.routes.user import user_router
 import uvicorn
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await DatabaseConnection.connect_and_init()
+    await connect_and_init()
     print("message hello")
     yield
-    await DatabaseConnection.close()
+    await close()
     print("message Goodbye")
 
 app = FastAPI(lifespan=lifespan)
