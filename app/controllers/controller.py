@@ -1,11 +1,11 @@
-from app.db.database import db
+from app.db.database import DatabaseConnection
 from app.models.models import User
 from app.services.auth import hash_password, verify_password, create_verification_token
 from app.services.email_service import send_verification_email
 from datetime import datetime
 
 async def create_user(user_data: dict):
-    
+    db = DatabaseConnection.db
     existing_user = await db.users.find_one({"email": user_data['email']})
     if existing_user:
         return None

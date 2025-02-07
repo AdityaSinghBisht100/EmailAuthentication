@@ -1,4 +1,3 @@
-# routes/user.py
 from fastapi import APIRouter, HTTPException
 from app.controllers.controller import create_user, authenticate_user, verify_user
 from app.services.auth import create_access_token
