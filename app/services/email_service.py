@@ -17,7 +17,7 @@ def send_verification_email(email: str, verification_token: str):
     message['To'] = email
     message['Subject'] = 'Verify Your Account'
 
-    verification_url = f"http://localhost:8000/verify?token={verification_token}"
+    verification_url = f"http://localhost:8000/users/verify?token={verification_token}"
 
     body = f"""
     <html>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { signupUser, loginUser } from '../components/authService';
+import {useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -7,14 +8,27 @@ const AuthPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
 
     try {
       if (isLogin) {
-        await loginUser(email, password);
+        const response = await loginUser(email, password);
+       if(response.access_token)
+        {
+          localStorage.setItem('token', response.access_token);
+          navigate('/dashboard')
+        }
+       else{
+        setError('Invaclid credentials');
+        return;
+       }
+
       } else {
         if (password !== confirmPassword) {
           setError('Passwords do not match');
@@ -22,7 +36,8 @@ const AuthPage = () => {
         }
         const response = await signupUser(email, password, confirmPassword);
         setMessage('Verification email sent. Please check your inbox.');
-        await signupUser(email, password, confirmPassword);
+        setIsLogin(true);
+
       }
     } catch (err) {
       setError(err.message);
@@ -31,7 +46,6 @@ const AuthPage = () => {
 
   return (
     <div className="relative min-h-screen flex overflow-hidden bg-gray-100">
-      {/* Curved Background Divide */}
       <div className="absolute top-0 left-0 w-full h-full z-0">
         <svg width="100%" height="100%" viewBox="0 0 1440 900" preserveAspectRatio="none">
           <path 
@@ -58,13 +72,11 @@ const AuthPage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              
             </div>
           </div>
         </div>
       </div>
 
-      {/* Right Side (White) */}
       <div className="w-1/2 z-20 flex items-center justify-center">
         <div className="bg-white rounded-xl shadow-2xl p-10 w-96">
           <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
@@ -74,6 +86,12 @@ const AuthPage = () => {
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
               {error}
+            </div>
+          )}
+          
+          {message && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+              {message}
             </div>
           )}
           

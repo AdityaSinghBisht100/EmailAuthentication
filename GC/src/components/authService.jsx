@@ -1,4 +1,3 @@
-// Signup API Call
 export const signupUser = async (email, password, confirmPassword) => {
     try {
       const response = await fetch('http://localhost:8000/users/signup', {
@@ -18,7 +17,7 @@ export const signupUser = async (email, password, confirmPassword) => {
         throw new Error(errorData.detail || 'Signup failed');
       }
   
-      return await response.json();
+      return response.json();
     } catch (error) {
       console.error('Signup error:', error);
       throw error;
