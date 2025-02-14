@@ -23,7 +23,7 @@ def send_verification_email(email: str, verification_token: str):
     <html>
     <body>
     <h2>Account Verification</h2>
-    <p>Click the link below to verify your account:</p>
+    <p>Click the link below to verify your account:</p>    
     <a href="{verification_url}">Verify Account</a>
     <p>If the link doesn't work, copy and paste this URL:</p>
     <p>{verification_url}</p>
@@ -42,3 +42,4 @@ def send_verification_email(email: str, verification_token: str):
     except Exception as e:
         print(f"Email sending failed: {e}")
         return False
+    

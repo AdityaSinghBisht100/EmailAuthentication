@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 class DatabaseConnection:
-    client: AsyncIOMotorClient = None
-    db: AsyncIOMotorDatabase = None
+    client: AsyncIOMotorClient
+    db: AsyncIOMotorDatabase
       
     @classmethod
     async def connect_and_init(cls):
